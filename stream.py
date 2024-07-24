@@ -8,7 +8,8 @@ def main():
 
     file_path = 'data_streamlit.xlsx'
     feedback_file = 'feedback.csv'
-    
+    feedback_password = "your_password"  # Replace with your desired password
+
     try:
         df = pd.read_excel(file_path, engine='openpyxl')
     except Exception as e:
@@ -89,14 +90,17 @@ def main():
     else:
         st.info("Please select both Model and Property Name to see filtered data.")
 
-    # Section to display feedback only if SHOW_FEEDBACK is set
-    if os.getenv("SHOW_FEEDBACK") == "true":
-        st.header("Feedback Records")
+    # Section to display feedback
+    st.header("Feedback Records")
+    password = st.text_input("Enter password to view feedback records", type="password")
+    if password == feedback_password:
         if os.path.exists(feedback_file):
             feedback_df = pd.read_csv(feedback_file)
             st.dataframe(feedback_df)
         else:
             st.info("No feedback records found.")
+    elif password:
+        st.error("Incorrect password.")
 
 def format_text(text, add_space):
     text = re.sub(r'(^o )', r'* ', text, flags=re.MULTILINE)
