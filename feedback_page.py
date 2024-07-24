@@ -12,6 +12,12 @@ def feedback_page():
         if os.path.exists(feedback_file):
             feedback_df = pd.read_csv(feedback_file)
             st.dataframe(feedback_df)
+            
+            # Add a button to delete the feedback records
+            if st.button("Delete all feedback records"):
+                os.remove(feedback_file)
+                st.success("All feedback records have been deleted.")
+                st.experimental_rerun()
         else:
             st.info("No feedback records found.")
     elif password:
