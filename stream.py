@@ -89,7 +89,7 @@ def main():
     else:
         st.info("Please select both Model and Property Name to see filtered data.")
 
-    # Section to display feedback
+    # Section to display feedback only if SHOW_FEEDBACK is set
     if os.getenv("SHOW_FEEDBACK") == "true":
         st.header("Feedback Records")
         if os.path.exists(feedback_file):
