@@ -90,12 +90,13 @@ def main():
         st.info("Please select both Model and Property Name to see filtered data.")
 
     # Section to display feedback
-    st.header("Feedback Records")
-    if os.path.exists(feedback_file):
-        feedback_df = pd.read_csv(feedback_file)
-        st.dataframe(feedback_df)
-    else:
-        st.info("No feedback records found.")
+    if os.getenv("SHOW_FEEDBACK") == "true":
+        st.header("Feedback Records")
+        if os.path.exists(feedback_file):
+            feedback_df = pd.read_csv(feedback_file)
+            st.dataframe(feedback_df)
+        else:
+            st.info("No feedback records found.")
 
 def format_text(text, add_space):
     text = re.sub(r'(^o )', r'* ', text, flags=re.MULTILINE)
