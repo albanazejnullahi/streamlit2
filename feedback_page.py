@@ -16,13 +16,13 @@ def feedback_page():
         password = st.text_input("Enter password to view feedback records", type="password")
         if password == feedback_password:
             st.session_state.authenticated = True
-            st.experimental_rerun()  # This rerun might be necessary for state changes
+            st.experimental_rerun()  # Trigger rerun to update the state
         elif password:
             st.error("Incorrect password.")
     else:
         if st.button("Logout"):
             st.session_state.authenticated = False
-            st.experimental_rerun()  # This rerun might be necessary for state changes
+            st.experimental_rerun()  # Trigger rerun to update the state
 
         if os.path.exists(feedback_file):
             feedback_df = pd.read_csv(feedback_file)
@@ -39,11 +39,11 @@ def feedback_page():
                         os.remove(feedback_file)
                         st.success("All feedback records have been deleted.")
                         st.session_state.show_confirm = False
-                        st.experimental_rerun()  # This rerun might be necessary for state changes
+                        st.experimental_rerun()  # Trigger rerun to update the state
                 with col2:
                     if st.button("No"):
                         st.session_state.show_confirm = False
-                        st.experimental_rerun()  # This rerun might be necessary for state changes
+                        st.experimental_rerun()  # Trigger rerun to update the state
 
         else:
             st.info("No feedback records found.")
