@@ -30,16 +30,12 @@ def feedback_page():
                 else:
                     st.error("Incorrect password.")
     else:
-        # When authenticated, show the feedback records and logout option
-        st.info("You are logged in.")
         if st.button("Logout"):
             st.session_state.authenticated = False
             st.session_state.show_confirm = False
             # Update the query parameters to force an update
             st.experimental_set_query_params(logged_in=False)
-            st.info("You have been logged out.")
 
-        # Display feedback records if the file exists
         if os.path.exists(feedback_file):
             feedback_df = pd.read_csv(feedback_file)
             st.dataframe(feedback_df)
