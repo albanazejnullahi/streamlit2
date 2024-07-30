@@ -12,20 +12,17 @@ def feedback_page():
         st.session_state.authenticated = False
     if 'show_confirm' not in st.session_state:
         st.session_state.show_confirm = False
-    if 'reload' not in st.session_state:
-        st.session_state.reload = False
 
+    # Authentication logic
     if not st.session_state.authenticated:
         password = st.text_input("Enter password to view feedback records", type="password")
         if password == feedback_password:
             st.session_state.authenticated = True
-            st.experimental_rerun()  # Optional: Refresh to reflect authentication change
         elif password:
             st.error("Incorrect password.")
     else:
         if st.button("Logout"):
             st.session_state.authenticated = False
-            st.experimental_rerun()  # Refresh to reflect logout
 
         # Display feedback records if available
         if os.path.exists(feedback_file):
@@ -43,11 +40,11 @@ def feedback_page():
                         os.remove(feedback_file)
                         st.success("All feedback records have been deleted.")
                         st.session_state.show_confirm = False
-                        st.experimental_rerun()  # Refresh to update state after deletion
+                        # Reset authenticated state after deletion if needed
+                        st.session_state.authenticated = False
                 with col2:
                     if st.button("No"):
                         st.session_state.show_confirm = False
-                        st.experimental_rerun()  # Refresh to cancel deletion
         else:
             st.info("No feedback records found.")
 
