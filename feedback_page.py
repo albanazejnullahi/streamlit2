@@ -15,13 +15,17 @@ def feedback_page():
 
     # Authentication logic
     if not st.session_state.authenticated:
-        password = st.text_input("Enter password to view feedback records", type="password")
-        if st.button("Login"):
-            if password == feedback_password:
-                st.session_state.authenticated = True
-                st.session_state.show_confirm = False  # Reset confirmation state
-            else:
-                st.error("Incorrect password.")
+        # Use a form to handle the login process
+        with st.form("login_form"):
+            password = st.text_input("Enter password to view feedback records", type="password")
+            login_button = st.form_submit_button("Login")
+
+            if login_button:
+                if password == feedback_password:
+                    st.session_state.authenticated = True
+                    st.session_state.show_confirm = False  # Reset confirmation state
+                else:
+                    st.error("Incorrect password.")
     else:
         st.button("Logout", on_click=lambda: logout())
 
