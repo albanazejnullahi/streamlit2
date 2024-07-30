@@ -16,20 +16,28 @@ def feedback_page():
     # Authentication logic
     if not st.session_state.authenticated:
         # Show login form if not authenticated
-        password = st.text_input("Enter password to view feedback records", type="password")
-        if st.button("Login"):
-            if password == feedback_password:
-                st.session_state.authenticated = True
-                st.session_state.show_confirm = False  # Reset the confirm flag
-                st.success("Logged in successfully.")
-            else:
-                st.error("Incorrect password.")
+        with st.form(key='login_form'):
+            password = st.text_input("Enter password to view feedback records", type="password")
+            login_button = st.form_submit_button("Login")
+            
+            if login_button:
+                if password == feedback_password:
+                    st.session_state.authenticated = True
+                    st.session_state.show_confirm = False  # Reset the confirm flag
+                    st.success("Logged in successfully.")
+                    # Set query params to ensure page updates
+                    st.experimental_set_query_params(logged_in=True)
+                else:
+                    st.error("Incorrect password.")
     else:
         # When authenticated, show the feedback records and logout option
+        st.info("You are logged in.")
         if st.button("Logout"):
             st.session_state.authenticated = False
             st.session_state.show_confirm = False
-            st.experimental_rerun()  # Rerun to reset the view
+            # Update the query parameters to force an update
+            st.experimental_set_query_params(logged_in=False)
+            st.info("You have been logged out.")
 
         # Display feedback records if the file exists
         if os.path.exists(feedback_file):
