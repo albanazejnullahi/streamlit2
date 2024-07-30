@@ -46,7 +46,6 @@ def main():
         else:
             for index, row in filtered_df.iterrows():
                 st.markdown(f"**Property Name: {row['Property Name']}**")
-                
                 st.markdown("---")
 
                 # Display Subject Data and Comps Data side by side
