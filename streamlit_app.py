@@ -84,8 +84,8 @@ def main():
         st.info("Please select a Property Name to see filtered data.")
 
 def format_text(text):
-    # Remove extra newlines and trim whitespace
-    text = re.sub(r'\n+', '\n', text).strip()
+    # Add extra space between sections
+    text = re.sub(r'(Analysis|Leading Indicators|Overall Analysis)', r'\n### \1\n', text)
     # Replace newlines with <br> for HTML rendering
     formatted_text = text.replace("\n", "<br>")
     # Apply specific formatting if needed
