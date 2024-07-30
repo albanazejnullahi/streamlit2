@@ -24,21 +24,20 @@ def main():
     df['Comps Data'] = df['Comps Data'].astype(str)
     df['Assessment'] = df['Assessment'].astype(str)
     
-    unique_property_names = df['Property Name'].unique().tolist() if 'Property Name' in df.columns else []
-    unique_property_names.insert(0, 'Select Property Name')
+    # Get unique property names and limit to the first 10
+    unique_property_names = df['Property Name'].unique().tolist()
+    top_10_property_names = unique_property_names[:10]
+    top_10_property_names.insert(0, 'Select Property Name')
 
     with st.sidebar:
         st.subheader('Filters')
-        selected_property_name = st.selectbox("Select Property Name", unique_property_names, key='property_dropdown', help="Select the Property Name")
+        selected_property_name = st.selectbox("Select Property Name", top_10_property_names, key='property_dropdown', help="Select the Property Name")
 
     if selected_property_name != 'Select Property Name':
         # Filter by Property Name
         filtered_df = df[df['Property Name'] == selected_property_name]
         # Further filter to include only rows where Assessment is not empty
         filtered_df = filtered_df[filtered_df['Assessment'].str.strip().astype(bool)]
-
-        # Limit to top 10 properties
-        filtered_df = filtered_df.head(10)
 
         st.header("Filtered Data")
 
