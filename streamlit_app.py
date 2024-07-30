@@ -19,31 +19,20 @@ def main():
     df.columns = df.columns.str.strip()
     
     # Convert all relevant columns to string type
-    df['Model'] = df['Model'].astype(str)
     df['Property Name'] = df['Property Name'].astype(str)
     df['Subject Data'] = df['Subject Data'].astype(str)
-    df['Comp Data'] = df['Comp Data'].astype(str)
-    df['Narrative'] = df['Narrative'].astype(str)
+    df['Comps Data'] = df['Comps Data'].astype(str)
+    df['Assessment'] = df['Assessment'].astype(str)
     
-    unique_values_column1 = df['Model'].unique().tolist() if 'Model' in df.columns else []
-    unique_values_column2 = df['Property Name'].unique().tolist() if 'Property Name' in df.columns else []
-    
-    unique_values_column1.insert(0, 'Select Model')
-    unique_values_column2.insert(0, 'Select Property Name')
+    unique_property_names = df['Property Name'].unique().tolist() if 'Property Name' in df.columns else []
+    unique_property_names.insert(0, 'Select Property Name')
 
     with st.sidebar:
         st.subheader('Filters')
-        selected_column1_value = st.selectbox("Select Model", unique_values_column1, key='model_dropdown', help="Select the Model")
-        selected_column2_value = st.selectbox("Select Property Name", unique_values_column2, key='property_dropdown', help="Select the Property Name")
+        selected_property_name = st.selectbox("Select Property Name", unique_property_names, key='property_dropdown', help="Select the Property Name")
 
-    if selected_column1_value != 'Select Model' and selected_column2_value != 'Select Property Name':
-        if selected_column1_value == 'Select Model':
-            filtered_df = df[df['Property Name'] == selected_column2_value]
-        elif selected_column2_value == 'Select Property Name':
-            filtered_df = df[df['Model'] == selected_column1_value]
-        else:
-            filtered_df = df[(df['Model'] == selected_column1_value) & 
-                             (df['Property Name'] == selected_column2_value)]
+    if selected_property_name != 'Select Property Name':
+        filtered_df = df[df['Property Name'] == selected_property_name]
 
         st.header("Filtered Data")
 
@@ -51,11 +40,11 @@ def main():
             st.warning("No data found with the selected criteria.")
         else:
             for index, row in filtered_df.iterrows():
-                st.markdown(f"### Model: {row['Model']} | Property Name: {row['Property Name']}")
+                st.markdown(f"### Property Name: {row['Property Name']}")
                 
                 st.markdown("---")
 
-                # Display Subject Data and Comp Data side by side
+                # Display Subject Data and Comps Data side by side
                 col1, col2 = st.columns(2)
                 with col1:
                     st.markdown(f"### Subject Data")
@@ -63,23 +52,23 @@ def main():
                     st.markdown(formatted_subject_data, unsafe_allow_html=True)
 
                 with col2:
-                    st.markdown(f"### Comp Data")
-                    formatted_comp_data = format_text(row['Comp Data'], add_space=False)
-                    st.markdown(formatted_comp_data, unsafe_allow_html=True)
+                    st.markdown(f"### Comps Data")
+                    formatted_comps_data = format_text(row['Comps Data'], add_space=False)
+                    st.markdown(formatted_comps_data, unsafe_allow_html=True)
 
                 st.markdown("---")
 
-                # Display Narrative
-                st.markdown(f"### Narrative")
-                formatted_narrative = format_text(row['Narrative'], add_space=True)
-                st.markdown(formatted_narrative, unsafe_allow_html=True)
+                # Display Assessment
+                st.markdown(f"### Assessment")
+                formatted_assessment = format_text(row['Assessment'], add_space=True)
+                st.markdown(formatted_assessment, unsafe_allow_html=True)
 
                 st.markdown("---")
                 
                 # Feedback Form
                 st.markdown("### Feedback")
                 name = st.text_input("Your Name")
-                info = f"Model: {row['Model']}, Property Name: {row['Property Name']}"
+                info = f"Property Name: {row['Property Name']}"
                 st.text_input("Info", value=info, disabled=True)
                 feedback = st.text_area("Your Feedback")
                 if st.button("Submit"):
@@ -87,7 +76,7 @@ def main():
                     st.success(f"Thank you for your feedback, {name}!")
 
     else:
-        st.info("Please select both Model and Property Name to see filtered data.")
+        st.info("Please select a Property Name to see filtered data.")
 
 def format_text(text, add_space):
     text = re.sub(r'(^o )', r'* ', text, flags=re.MULTILINE)
