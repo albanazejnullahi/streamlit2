@@ -13,8 +13,9 @@ def feedback_page():
     if 'show_confirm' not in st.session_state:
         st.session_state.show_confirm = False
 
-    # Authentication logic using form
+    # Authentication logic
     if not st.session_state.authenticated:
+        # Show login form if not authenticated
         with st.form("login_form"):
             password = st.text_input("Enter password to view feedback records", type="password")
             login_button = st.form_submit_button("Login")
@@ -22,23 +23,25 @@ def feedback_page():
             if login_button:
                 if password == feedback_password:
                     st.session_state.authenticated = True
-                    st.session_state.show_confirm = False  # Reset any confirmation state
+                    st.session_state.show_confirm = False  # Reset the confirm flag
                     st.success("Logged in successfully.")
                 else:
                     st.error("Incorrect password.")
     else:
-        st.button("Logout", on_click=lambda: logout())
+        # When authenticated, show the feedback records and logout option
+        if st.button("Logout"):
+            st.session_state.authenticated = False
+            st.session_state.show_confirm = False
 
-        # Display feedback records if authenticated and file exists
+        # Display feedback records if the file exists
         if os.path.exists(feedback_file):
             feedback_df = pd.read_csv(feedback_file)
             st.dataframe(feedback_df)
 
-            # Button to delete records
             if st.button("Delete all feedback records"):
                 st.session_state.show_confirm = True
 
-            # Show confirmation dialog if deletion is requested
+            # Confirmation dialog for deletion
             if st.session_state.show_confirm:
                 st.warning("Are you sure you want to delete all feedback records?")
                 col1, col2 = st.columns(2)
@@ -51,16 +54,11 @@ def feedback_page():
         else:
             st.info("No feedback records found.")
 
-def logout():
-    st.session_state.authenticated = False
-    st.info("Logged out successfully.")
-
 def delete_records(file_path):
     if os.path.exists(file_path):
         os.remove(file_path)
         st.success("All feedback records have been deleted.")
-        st.session_state.show_confirm = False
-        st.session_state.authenticated = False  # Optional: Logout after deletion
+    st.session_state.show_confirm = False
 
 if __name__ == "__main__":
     feedback_page()
