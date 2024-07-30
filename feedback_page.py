@@ -7,23 +7,27 @@ def feedback_page():
     feedback_file = 'feedback.csv'
     feedback_password = "London123"
 
+    # Initialize session state variables if they do not exist
     if 'authenticated' not in st.session_state:
         st.session_state.authenticated = False
     if 'show_confirm' not in st.session_state:
         st.session_state.show_confirm = False
+    if 'reload' not in st.session_state:
+        st.session_state.reload = False
 
     if not st.session_state.authenticated:
         password = st.text_input("Enter password to view feedback records", type="password")
         if password == feedback_password:
             st.session_state.authenticated = True
+            st.experimental_rerun()  # Optional: Refresh to reflect authentication change
         elif password:
             st.error("Incorrect password.")
-    
-    if st.session_state.authenticated:
+    else:
         if st.button("Logout"):
             st.session_state.authenticated = False
-            st.experimental_rerun()  # Force a rerun to update the state
-        
+            st.experimental_rerun()  # Refresh to reflect logout
+
+        # Display feedback records if available
         if os.path.exists(feedback_file):
             feedback_df = pd.read_csv(feedback_file)
             st.dataframe(feedback_df)
@@ -39,11 +43,11 @@ def feedback_page():
                         os.remove(feedback_file)
                         st.success("All feedback records have been deleted.")
                         st.session_state.show_confirm = False
-                        st.experimental_rerun()  # Force a rerun to update the state
+                        st.experimental_rerun()  # Refresh to update state after deletion
                 with col2:
                     if st.button("No"):
                         st.session_state.show_confirm = False
-                        st.experimental_rerun()  # Force a rerun to update the state
+                        st.experimental_rerun()  # Refresh to cancel deletion
         else:
             st.info("No feedback records found.")
 
