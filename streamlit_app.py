@@ -32,7 +32,10 @@ def main():
         selected_property_name = st.selectbox("Select Property Name", unique_property_names, key='property_dropdown', help="Select the Property Name")
 
     if selected_property_name != 'Select Property Name':
+        # Filter by Property Name
         filtered_df = df[df['Property Name'] == selected_property_name]
+        # Further filter to include only rows where Assessment is not empty
+        filtered_df = filtered_df[filtered_df['Assessment'].str.strip().astype(bool)]
 
         st.header("Filtered Data")
 
