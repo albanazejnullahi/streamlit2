@@ -53,19 +53,19 @@ def main():
                 col1, col2 = st.columns(2)
                 with col1:
                     st.markdown(f"### Subject Data")
-                    formatted_subject_data = format_text(row['Subject Data'], add_space=False)
+                    formatted_subject_data = format_text(row['Subject Data'])
                     st.markdown(formatted_subject_data, unsafe_allow_html=True)
 
                 with col2:
                     st.markdown(f"### Comps Data")
-                    formatted_comps_data = format_text(row['Comps Data'], add_space=False)
+                    formatted_comps_data = format_text(row['Comps Data'])
                     st.markdown(formatted_comps_data, unsafe_allow_html=True)
 
                 st.markdown("---")
 
                 # Display Assessment
                 st.markdown(f"### Assessment")
-                formatted_assessment = format_text(row['Assessment'], add_space=True)
+                formatted_assessment = format_text(row['Assessment'])
                 st.markdown(formatted_assessment, unsafe_allow_html=True)
 
                 st.markdown("---")
@@ -83,19 +83,14 @@ def main():
     else:
         st.info("Please select a Property Name to see filtered data.")
 
-def format_text(text, add_space):
-    text = re.sub(r'(^o )', r'* ', text, flags=re.MULTILINE)
-
-    if add_space:
-        # Add white space between paragraphs
-        formatted_text = text.replace("\n", "<br><br>")
-    else:
-        formatted_text = text.replace("\n", "<br>")
-    
+def format_text(text):
+    # Remove extra newlines and trim whitespace
+    text = re.sub(r'\n+', '\n', text).strip()
+    # Replace newlines with <br> for HTML rendering
+    formatted_text = text.replace("\n", "<br>")
+    # Apply specific formatting if needed
     formatted_text = re.sub(r'\b(\w+italic\w+)\b', r'<i>\1</i>', formatted_text, flags=re.IGNORECASE)
-    
     formatted_text = formatted_text.replace("$", "\$")
-    
     return formatted_text
 
 def save_feedback(name, info, feedback, feedback_file):
