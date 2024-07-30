@@ -36,8 +36,8 @@ def main():
     
     with st.sidebar:
         st.subheader('Filters')
+        selected_model = st.selectbox("Select Model", unique_models, key='model_dropdown', help="Select the model for analysis")
         selected_property_name = st.selectbox("Select Property Name", top_10_property_names, key='property_dropdown', help="Select the Property Name")
-        selected_model = st.selectbox("Select Model", unique_models, key='model_dropdown', help="Select the Model")
 
     if selected_property_name != 'Select Property Name' and selected_model != 'Select Model':
         # Filter by Property Name and Model
@@ -86,7 +86,7 @@ def main():
                     st.success(f"Thank you for your feedback, {name}!")
 
     elif selected_property_name == 'Select Property Name' or selected_model == 'Select Model':
-        st.info("Please select both a Property Name and a Model to see filtered data.")
+        st.info("Please select both a Model and a Property Name to see filtered data.")
 
 def format_text(text):
     # Adjust spacing for headings
