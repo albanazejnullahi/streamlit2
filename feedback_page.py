@@ -16,22 +16,20 @@ def feedback_page():
     # Authentication logic
     if not st.session_state.authenticated:
         # Show login form if not authenticated
-        with st.form("login_form"):
-            password = st.text_input("Enter password to view feedback records", type="password")
-            login_button = st.form_submit_button("Login")
-            
-            if login_button:
-                if password == feedback_password:
-                    st.session_state.authenticated = True
-                    st.session_state.show_confirm = False  # Reset the confirm flag
-                    st.success("Logged in successfully.")
-                else:
-                    st.error("Incorrect password.")
+        password = st.text_input("Enter password to view feedback records", type="password")
+        if st.button("Login"):
+            if password == feedback_password:
+                st.session_state.authenticated = True
+                st.session_state.show_confirm = False  # Reset the confirm flag
+                st.success("Logged in successfully.")
+            else:
+                st.error("Incorrect password.")
     else:
         # When authenticated, show the feedback records and logout option
         if st.button("Logout"):
             st.session_state.authenticated = False
             st.session_state.show_confirm = False
+            st.experimental_rerun()  # Rerun to reset the view
 
         # Display feedback records if the file exists
         if os.path.exists(feedback_file):
@@ -46,10 +44,10 @@ def feedback_page():
                 st.warning("Are you sure you want to delete all feedback records?")
                 col1, col2 = st.columns(2)
                 with col1:
-                    if st.button("Yes"):
+                    if st.button("Yes, delete"):
                         delete_records(feedback_file)
                 with col2:
-                    if st.button("No"):
+                    if st.button("Cancel"):
                         st.session_state.show_confirm = False
         else:
             st.info("No feedback records found.")
