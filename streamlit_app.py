@@ -45,33 +45,33 @@ def main():
             st.warning("No data found with the selected criteria.")
         else:
             for index, row in filtered_df.iterrows():
-                st.markdown(f"### Property Name: {row['Property Name']}")
+                st.markdown(f"**Property Name: {row['Property Name']}**")
                 
                 st.markdown("---")
 
                 # Display Subject Data and Comps Data side by side
                 col1, col2 = st.columns(2)
                 with col1:
-                    st.markdown(f"### Subject Data")
+                    st.markdown(f"**Subject Data**")
                     formatted_subject_data = format_text(row['Subject Data'])
                     st.markdown(formatted_subject_data, unsafe_allow_html=True)
 
                 with col2:
-                    st.markdown(f"### Comps Data")
+                    st.markdown(f"**Comps Data**")
                     formatted_comps_data = format_text(row['Comps Data'])
                     st.markdown(formatted_comps_data, unsafe_allow_html=True)
 
                 st.markdown("---")
 
                 # Display Assessment
-                st.markdown(f"### Assessment")
+                st.markdown(f"**Assessment**")
                 formatted_assessment = format_text(row['Assessment'])
                 st.markdown(formatted_assessment, unsafe_allow_html=True)
 
                 st.markdown("---")
                 
                 # Feedback Form
-                st.markdown("### Feedback")
+                st.markdown("**Feedback**")
                 name = st.text_input("Your Name")
                 info = f"Property Name: {row['Property Name']}"
                 st.text_input("Info", value=info, disabled=True)
@@ -85,7 +85,7 @@ def main():
 
 def format_text(text):
     # Add extra space between sections
-    text = re.sub(r'(Analysis|Leading Indicators|Overall Analysis)', r'\n### \1\n', text)
+    text = re.sub(r'(Analysis|Leading Indicators|Overall Analysis)', r'\n\n\1\n\n', text)
     # Replace newlines with <br> for HTML rendering
     formatted_text = text.replace("\n", "<br>")
     # Apply specific formatting if needed
