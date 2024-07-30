@@ -23,19 +23,25 @@ def main():
     df['Subject Data'] = df['Subject Data'].astype(str)
     df['Comps Data'] = df['Comps Data'].astype(str)
     df['Assessment'] = df['Assessment'].astype(str)
+    df['Model'] = df['Model'].astype(str)
     
     # Get unique property names and limit to the first 10
     unique_property_names = df['Property Name'].unique().tolist()
     top_10_property_names = unique_property_names[:10]
     top_10_property_names.insert(0, 'Select Property Name')
-
+    
+    # Get unique models
+    unique_models = df['Model'].unique().tolist()
+    unique_models.insert(0, 'Select Model')
+    
     with st.sidebar:
         st.subheader('Filters')
         selected_property_name = st.selectbox("Select Property Name", top_10_property_names, key='property_dropdown', help="Select the Property Name")
+        selected_model = st.selectbox("Select Model", unique_models, key='model_dropdown', help="Select the Model")
 
-    if selected_property_name != 'Select Property Name':
-        # Filter by Property Name
-        filtered_df = df[df['Property Name'] == selected_property_name]
+    if selected_property_name != 'Select Property Name' and selected_model != 'Select Model':
+        # Filter by Property Name and Model
+        filtered_df = df[(df['Property Name'] == selected_property_name) & (df['Model'] == selected_model)]
         # Further filter to include only rows where Assessment is not empty
         filtered_df = filtered_df[filtered_df['Assessment'].str.strip().astype(bool)]
 
@@ -72,15 +78,15 @@ def main():
                 # Feedback Form
                 st.markdown("**Feedback**")
                 name = st.text_input("Your Name")
-                info = f"Property Name: {row['Property Name']}"
+                info = f"Property Name: {row['Property Name']} - Model: {row['Model']}"
                 st.text_input("Info", value=info, disabled=True)
                 feedback = st.text_area("Your Feedback")
                 if st.button("Submit"):
                     save_feedback(name, info, feedback, feedback_file)
                     st.success(f"Thank you for your feedback, {name}!")
 
-    else:
-        st.info("Please select a Property Name to see filtered data.")
+    elif selected_property_name == 'Select Property Name' or selected_model == 'Select Model':
+        st.info("Please select both a Property Name and a Model to see filtered data.")
 
 def format_text(text):
     # Adjust spacing for headings
