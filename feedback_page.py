@@ -5,7 +5,7 @@ import os
 def feedback_page():
     st.title('Feedback Records')
     feedback_file = 'feedback.csv'
-    feedback_password = "London123"  
+    feedback_password = "London123"
 
     if 'authenticated' not in st.session_state:
         st.session_state.authenticated = False
@@ -22,7 +22,8 @@ def feedback_page():
     if st.session_state.authenticated:
         if st.button("Logout"):
             st.session_state.authenticated = False
-
+            st.experimental_rerun()  # Force a rerun to update the state
+        
         if os.path.exists(feedback_file):
             feedback_df = pd.read_csv(feedback_file)
             st.dataframe(feedback_df)
@@ -38,14 +39,11 @@ def feedback_page():
                         os.remove(feedback_file)
                         st.success("All feedback records have been deleted.")
                         st.session_state.show_confirm = False
-                        # Reload the page
-                        st.experimental_rerun()  # Optional: remove if you handle it without rerun
+                        st.experimental_rerun()  # Force a rerun to update the state
                 with col2:
                     if st.button("No"):
                         st.session_state.show_confirm = False
-                        # Reload the page
-                        st.experimental_rerun()  # Optional: remove if you handle it without rerun
-
+                        st.experimental_rerun()  # Force a rerun to update the state
         else:
             st.info("No feedback records found.")
 
