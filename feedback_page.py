@@ -27,6 +27,7 @@ def feedback_page():
                     st.success("Logged in successfully.")
                     # Set query params to ensure page updates
                     st.experimental_set_query_params(logged_in=True)
+                    st.experimental_rerun()  # Rerun the app to refresh state
                 else:
                     st.error("Incorrect password.")
     else:
@@ -35,6 +36,7 @@ def feedback_page():
             st.session_state.show_confirm = False
             # Update the query parameters to force an update
             st.experimental_set_query_params(logged_in=False)
+            st.experimental_rerun()  # Rerun the app to refresh state
 
         if os.path.exists(feedback_file):
             feedback_df = pd.read_csv(feedback_file)
@@ -50,6 +52,7 @@ def feedback_page():
                 with col1:
                     if st.button("Yes, delete"):
                         delete_records(feedback_file)
+                        st.experimental_rerun()  # Rerun the app to refresh state
                 with col2:
                     if st.button("Cancel"):
                         st.session_state.show_confirm = False
