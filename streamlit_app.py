@@ -45,7 +45,6 @@ def main():
         # Further filter to include only rows where Assessment is not empty
         filtered_df = filtered_df[filtered_df['Assessment'].str.strip().astype(bool)]
 
-        st.header("Filtered Data")
 
         if filtered_df.empty:
             st.warning("No data found with the selected criteria.")
