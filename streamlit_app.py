@@ -27,7 +27,7 @@ def main():
     
     # Get unique property names and limit to the first 10
     unique_property_names = df['Property Name'].unique().tolist()
-    top_10_property_names = unique_property_names[:10]
+    top_10_property_names = unique_property_names
     top_10_property_names.insert(0, 'Select Property Name')
     
     # Get unique models
