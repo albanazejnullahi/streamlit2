@@ -6,7 +6,7 @@ import os
 def main():
     st.title('AI Narratives')
 
-    file_path = 'processed_properties 2(1).xlsx'
+    file_path = 'processed_properties.xlsx'
     feedback_file = 'feedback.csv'
     
     try:
